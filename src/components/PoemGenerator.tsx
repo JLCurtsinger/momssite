@@ -21,25 +21,12 @@ export const PoemGenerator = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      const response = await fetch("/.netlify/functions/generate-poem", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
-        body: JSON.stringify({
-          model: "gpt-4o-mini",
-          messages: [
-            {
-              role: "system",
-              content: "You are a poetic AI that creates beautiful, emotional poems. Keep responses to exactly 4 lines.",
-            },
-            {
-              role: "user",
-              content: `Create a beautiful, emotional 4-line poem inspired by the theme of "${input}". Make it personal and inspiring.`,
-            },
-          ],
-        }),
+        body: JSON.stringify({ input: input.trim() }),
       });
 
       if (!response.ok) {
@@ -47,8 +34,7 @@ export const PoemGenerator = () => {
       }
 
       const data = await response.json();
-      const poemText = data.choices[0].message.content;
-      const poemLines = poemText.split("\n").filter((line: string) => line.trim());
+      const poemLines = data.poem;
       
       setPoem([]);
       let currentLine = 0;
