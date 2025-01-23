@@ -64,16 +64,10 @@ export default {
         },
         "border-glow": {
           "0%": {
-            backgroundPosition: "0% 0%",
-            backgroundSize: "300% 100%",
-          },
-          "50%": {
-            backgroundPosition: "100% 0%",
-            backgroundSize: "300% 100%",
+            "background-position": "0% 0%"
           },
           "100%": {
-            backgroundPosition: "0% 0%",
-            backgroundSize: "300% 100%",
+            "background-position": "100% 0%"
           }
         }
       },
@@ -83,7 +77,7 @@ export default {
         glow: "glow 2s ease-in-out infinite",
         breathe: "breathe 3s ease-in-out infinite",
         typewriter: "typewriter 2s steps(40, end)",
-        "border-glow": "border-glow 4s linear infinite",
+        "border-glow": "border-glow 3s linear infinite",
       },
     },
   },
