@@ -28,23 +28,23 @@ export const handler: Handler = async (event) => {
       messages: [
         {
           role: "system",
-          content: "You are a poetic AI that writes beautiful, inspiring poems. Keep responses elegant, uplifting, and concise—exactly four lines only.",
+          content: "You are a poetic AI that writes beautiful, inspiring poems. Your poems must have exactly 6 lines, with a clear rhyming pattern where each line's ending word rhymes with at least one other line. Keep responses elegant, uplifting, and focused on inspiring the reader.",
         },
         {
           role: "user",
-          content: `Based on the word or phrase "${input}", write a short, inspirational poem. Keep it elegant, uplifting, and concise—four lines only.`,
+          content: `Based on the word or phrase "${input}", write a beautiful, rhyming poem that is exactly 6 lines long. Ensure each line ends with a word that rhymes with at least one other line's ending. Keep the tone elegant, inspiring, and uplifting. Format the response as plain text with each line separated by a newline character.`,
         },
       ],
-      max_tokens: 60,
+      max_tokens: 100,
       temperature: 0.7,
     });
 
     const poemText = response.choices[0].message?.content || "";
     const poemLines = poemText.split("\n").filter((line) => line.trim());
 
-    // Ensure we only return exactly 4 lines
-    if (poemLines.length !== 4) {
-      throw new Error("Invalid poem format received");
+    // Ensure we have exactly 6 lines
+    if (poemLines.length !== 6) {
+      throw new Error("Invalid poem format: incorrect number of lines");
     }
 
     return {
