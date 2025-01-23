@@ -1,11 +1,9 @@
 import { Handler } from "@netlify/functions";
-import { Configuration, OpenAIApi } from "openai";
+import OpenAI from "openai";
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
-const openai = new OpenAIApi(configuration);
 
 export const handler: Handler = async (event) => {
   if (event.httpMethod !== "POST") {
@@ -25,7 +23,7 @@ export const handler: Handler = async (event) => {
       };
     }
 
-    const response = await openai.createChatCompletion({
+    const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
         {
@@ -41,7 +39,7 @@ export const handler: Handler = async (event) => {
       temperature: 0.7,
     });
 
-    const poemText = response.data.choices[0].message?.content || "";
+    const poemText = response.choices[0].message?.content || "";
     const poemLines = poemText.split("\n").filter((line) => line.trim());
 
     // Ensure we only return exactly 4 lines
