@@ -86,10 +86,10 @@ export const PoemGenerator = () => {
         <div className="relative">
           <Input
             type="text"
-            placeholder="Enter your inspiration..."
+            placeholder="What inspires your poem?"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+            className="bg-white/5 border-2 border-primary/30 text-white placeholder:text-white/60 focus:border-white transition-colors duration-300 focus:bg-white/10"
           />
           <div className="absolute inset-0 rounded-md p-[1px] bg-gradient-to-r from-secondary via-primary to-secondary animate-border-glow pointer-events-none" />
         </div>
