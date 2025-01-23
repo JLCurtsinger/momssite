@@ -26,21 +26,28 @@ export const handler: Handler = async (event) => {
     }
 
     const response = await openai.createChatCompletion({
-      model: "gpt-4",
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
-          content: "You are a poetic AI that creates beautiful, emotional poems. Keep responses to exactly 4 lines.",
+          content: "You are a poetic AI that writes beautiful, inspiring poems. Keep responses elegant, uplifting, and concise—exactly four lines only.",
         },
         {
           role: "user",
-          content: `Create a beautiful, emotional 4-line poem inspired by the theme of "${input}". Make it personal and inspiring.`,
+          content: `Based on the word or phrase "${input}", write a short, inspirational poem. Keep it elegant, uplifting, and concise—four lines only.`,
         },
       ],
+      max_tokens: 60,
+      temperature: 0.7,
     });
 
     const poemText = response.data.choices[0].message?.content || "";
     const poemLines = poemText.split("\n").filter((line) => line.trim());
+
+    // Ensure we only return exactly 4 lines
+    if (poemLines.length !== 4) {
+      throw new Error("Invalid poem format received");
+    }
 
     return {
       statusCode: 200,
@@ -50,7 +57,9 @@ export const handler: Handler = async (event) => {
     console.error("Error:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Failed to generate poem" }),
+      body: JSON.stringify({ 
+        error: "Failed to generate poem. Please try again in a moment." 
+      }),
     };
   }
 };
