@@ -9,6 +9,10 @@ export const PoemGenerator = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const generatePoem = async () => {
     if (!input.trim()) {
       toast({
@@ -61,7 +65,15 @@ export const PoemGenerator = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 space-y-8">
+    <div className="relative flex flex-col items-center justify-center min-h-screen p-4 space-y-8">
+      <a 
+        onClick={scrollToTop}
+        className="fixed top-4 left-4 text-xl md:text-2xl font-bold gradient-text animate-glow cursor-pointer hover:opacity-80 transition-opacity"
+        style={{ zIndex: 50 }}
+      >
+        TrinaKeen.com
+      </a>
+
       <h1 className="text-4xl md:text-5xl font-bold text-center gradient-text animate-glow">
         Create a Beautiful Poem
       </h1>
