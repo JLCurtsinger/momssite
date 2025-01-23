@@ -88,7 +88,7 @@ export const PoemGenerator = () => {
           placeholder="Enter your inspiration..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+          className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 relative before:absolute before:inset-0 before:rounded-md before:p-[1px] before:bg-gradient-to-r before:from-secondary before:to-primary before:animate-border-glow before:content-[''] focus:before:animate-none hover:before:animate-none before:-z-10 focus:outline-none"
         />
         
         <Button

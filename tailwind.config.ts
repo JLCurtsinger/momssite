@@ -62,6 +62,14 @@ export default {
           from: { width: "0" },
           to: { width: "100%" },
         },
+        "border-glow": {
+          "0%": {
+            "background-position": "0% 0%"
+          },
+          "100%": {
+            "background-position": "100% 0%"
+          }
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -69,6 +77,7 @@ export default {
         glow: "glow 2s ease-in-out infinite",
         breathe: "breathe 3s ease-in-out infinite",
         typewriter: "typewriter 2s steps(40, end)",
+        "border-glow": "border-glow 3s linear infinite",
       },
     },
   },
