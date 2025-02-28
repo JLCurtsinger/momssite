@@ -1,12 +1,16 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { Share } from "lucide-react";
+import ShareModal from "./ShareModal";
 
 export const PoemGenerator = () => {
   const [input, setInput] = useState("");
   const [poem, setPoem] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const { toast } = useToast();
 
   const scrollToTop = () => {
@@ -64,6 +68,10 @@ export const PoemGenerator = () => {
     }
   };
 
+  const getPoemText = () => {
+    return poem.join('\n');
+  };
+
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen p-4 space-y-8">
       <a 
@@ -101,7 +109,7 @@ export const PoemGenerator = () => {
       </div>
 
       {poem.length > 0 && (
-        <div className="space-y-2 text-center max-w-md">
+        <div className="space-y-2 text-center max-w-md relative">
           {poem.map((line, index) => (
             <p
               key={index}
@@ -111,8 +119,25 @@ export const PoemGenerator = () => {
               {line}
             </p>
           ))}
+          
+          <div className="flex justify-end mt-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-primary hover:text-primary/80 hover:bg-white/5 rounded-full p-2 transition-all hover:shadow-glow"
+              onClick={() => setIsShareModalOpen(true)}
+            >
+              <Share size={20} />
+            </Button>
+          </div>
         </div>
       )}
+
+      <ShareModal 
+        isOpen={isShareModalOpen} 
+        onClose={() => setIsShareModalOpen(false)} 
+        poemText={getPoemText()} 
+      />
     </div>
   );
 };
