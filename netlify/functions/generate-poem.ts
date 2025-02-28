@@ -1,3 +1,4 @@
+
 import { Handler } from "@netlify/functions";
 import OpenAI from "openai";
 
@@ -28,15 +29,15 @@ export const handler: Handler = async (event) => {
       messages: [
         {
           role: "system",
-          content: "You are a poetic AI that writes beautiful, inspiring poems. Your poems must have exactly 6 lines, with a clear rhyming pattern where each line's ending word rhymes with at least one other line. Use vivid imagery, metaphors, and positive themes to create an uplifting experience. Each line should contribute to a cohesive narrative or theme, building upon the previous lines to tell a complete story or convey a meaningful message. Keep responses elegant, inspiring, and focused on evoking hope and wonder.",
+          content: "You are a poetic AI that writes warm, uplifting, and inspiring poems. Your style is heartfelt and encouraging, similar to morning affirmations or gentle words of wisdom shared with a loved one. Your poems should be simple yet meaningful, with a smooth and natural flow. The tone should feel personal, like a message of kindness and positivity sent to brighten someone's day.",
         },
         {
           role: "user",
-          content: `Based on the word or phrase "${input}", write a beautiful, rhyming poem that is exactly 6 lines long. Ensure each line ends with a word that rhymes with at least one other line's ending. Use vivid imagery and metaphors that relate to the theme. The poem should flow naturally and tell a complete story or convey a clear message. Keep the tone elegant, inspiring, and uplifting. Format the response as plain text with each line separated by a newline character.`,
+          content: `Write a beautiful and inspiring poem based on the word or phrase: "${input}". The poem should be exactly 6 lines long and follow a natural rhyming pattern (AABB, AABCCB, or soft rhyming if needed). Use warm and welcoming imagery, evoking themes of light, new beginnings, and encouragement. The poem should feel personal, as if written for a loved one to start their day with hope and motivation. Keep the style simple, heartfelt, and clear, avoiding overly complex metaphors. Format the response as plain text with each line separated by a newline character.`,
         },
       ],
-      max_tokens: 100,
-      temperature: 0.7,
+      max_tokens: 120,
+      temperature: 0.6,
     });
 
     const poemText = response.choices[0].message?.content || "";
