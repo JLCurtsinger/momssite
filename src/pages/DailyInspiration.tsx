@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Share2 } from "lucide-react";
-import { toast } from "sonner";
+import { ArrowLeft } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 
 const DailyInspiration = () => {
   const [dailyPoem, setDailyPoem] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showShareModal, setShowShareModal] = useState(false);
 
   useEffect(() => {
     const checkAndUpdateDailyPoem = async () => {
@@ -89,47 +87,6 @@ const DailyInspiration = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const handleShare = () => {
-    setShowShareModal(true);
-  };
-
-  const closeShareModal = () => {
-    setShowShareModal(false);
-  };
-
-  const formatPoemForSharing = () => {
-    return dailyPoem.join('\n\n');
-  };
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(formatPoemForSharing());
-    toast.success("Poem copied to clipboard!");
-    closeShareModal();
-  };
-
-  const shareViaEmail = () => {
-    const subject = encodeURIComponent("A Beautiful Poem for You");
-    const body = encodeURIComponent(formatPoemForSharing());
-    window.open(`mailto:?subject=${subject}&body=${body}`);
-    closeShareModal();
-  };
-
-  const shareViaFacebookMessenger = () => {
-    const text = encodeURIComponent(formatPoemForSharing());
-    window.open(`https://www.facebook.com/dialog/send?link=${encodeURIComponent(window.location.href)}&app_id=181398895561764&redirect_uri=${encodeURIComponent(window.location.href)}&quote=${text}`);
-    closeShareModal();
-  };
-
-  const shareViaSms = () => {
-    const text = encodeURIComponent(formatPoemForSharing());
-    window.open(`sms:?&body=${text}`);
-    closeShareModal();
-  };
-
-  const isMobile = () => {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  };
-
   return <div className="min-h-screen flex flex-col items-center">
       <Toaster />
       <div className="w-full max-w-4xl px-4">
@@ -159,17 +116,6 @@ const DailyInspiration = () => {
                         {line}
                       </p>)}
                   </div>
-                  
-                  <div className="flex justify-end mt-6">
-                    <Button 
-                      variant="ghost" 
-                      size="icon"
-                      className="hover:bg-primary/20 text-primary transition-all duration-300 group"
-                      onClick={handleShare}
-                    >
-                      <Share2 size={18} className="group-hover:scale-110 group-hover:text-primary animate-pulse" />
-                    </Button>
-                  </div>
                 </>
               )}
             
@@ -180,62 +126,6 @@ const DailyInspiration = () => {
           <p className="text-sm text-white/60 mt-6">Updated daily!</p>
         </div>
       </div>
-
-      {showShareModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={closeShareModal}>
-          <div className="bg-[#1A2142] p-6 rounded-xl w-full max-w-xs shadow-xl border border-primary/20" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-xl font-cursive mb-4 text-center gradient-text">Share this poem</h3>
-            
-            <div className="grid grid-cols-2 gap-3">
-              <Button 
-                variant="outline" 
-                className="flex items-center justify-center gap-2 hover:bg-primary/20 border-primary/20"
-                onClick={copyToClipboard}
-              >
-                <span className="text-lg">📋</span>
-                <span>Copy Text</span>
-              </Button>
-              
-              <Button 
-                variant="outline" 
-                className="flex items-center justify-center gap-2 hover:bg-primary/20 border-primary/20"
-                onClick={shareViaEmail}
-              >
-                <span className="text-lg">✉️</span>
-                <span>Email</span>
-              </Button>
-              
-              <Button 
-                variant="outline" 
-                className="flex items-center justify-center gap-2 hover:bg-primary/20 border-primary/20"
-                onClick={shareViaFacebookMessenger}
-              >
-                <span className="text-lg">💬</span>
-                <span>Messenger</span>
-              </Button>
-              
-              {isMobile() && (
-                <Button 
-                  variant="outline" 
-                  className="flex items-center justify-center gap-2 hover:bg-primary/20 border-primary/20"
-                  onClick={shareViaSms}
-                >
-                  <span className="text-lg">📱</span>
-                  <span>SMS</span>
-                </Button>
-              )}
-            </div>
-            
-            <Button 
-              variant="ghost" 
-              className="w-full mt-4 text-white/60 hover:text-white"
-              onClick={closeShareModal}
-            >
-              Cancel
-            </Button>
-          </div>
-        </div>
-      )}
     </div>;
 };
 
