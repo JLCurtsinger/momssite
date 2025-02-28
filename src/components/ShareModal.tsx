@@ -2,7 +2,7 @@
 import React from "react";
 import { Copy, Mail, Facebook, MessageSquare } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import { isMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -12,7 +12,7 @@ interface ShareModalProps {
 
 const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, poemText }) => {
   const { toast } = useToast();
-  const mobile = isMobile();
+  const mobile = useIsMobile();
 
   if (!isOpen) return null;
 
