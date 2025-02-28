@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { Share } from "lucide-react";
+import { Share, Sparkles } from "lucide-react";
 import ShareModal from "./ShareModal";
 
 export const PoemGenerator = () => {
@@ -12,6 +12,16 @@ export const PoemGenerator = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const { toast } = useToast();
+
+  const inspirationalPhrases = [
+    "Golden sunrise",
+    "A fresh start",
+    "Joyful heart",
+    "Kindness in bloom",
+    "A day of light",
+    "Hope on the horizon",
+    "A heart full of love"
+  ];
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -68,6 +78,11 @@ export const PoemGenerator = () => {
     }
   };
 
+  const surpriseMe = () => {
+    const randomIndex = Math.floor(Math.random() * inspirationalPhrases.length);
+    setInput(inspirationalPhrases[randomIndex]);
+  };
+
   const getPoemText = () => {
     return poem.join('\n');
   };
@@ -105,6 +120,13 @@ export const PoemGenerator = () => {
           className="w-full bg-primary hover:bg-primary/80 animate-breathe"
         >
           {isLoading ? "Creating magic..." : "Inspire"}
+        </Button>
+
+        <Button
+          onClick={surpriseMe}
+          className="w-full bg-primary hover:bg-primary/80 animate-breathe"
+        >
+          Surprise Me
         </Button>
       </div>
 
