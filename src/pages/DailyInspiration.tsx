@@ -1,8 +1,10 @@
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 
 const DailyInspiration = () => {
   const [dailyPoem, setDailyPoem] = useState<string[]>([]);
@@ -16,9 +18,16 @@ const DailyInspiration = () => {
       const now = new Date();
       const nextUpdateTime = getNextUpdateTime();
       const needsUpdate = !lastUpdate || new Date(lastUpdate) < nextUpdateTime && now >= nextUpdateTime;
+      
+      console.log("Checking for daily poem update:");
+      console.log("- Current time:", now.toISOString());
+      console.log("- Next update time:", nextUpdateTime.toISOString());
+      console.log("- Needs update:", needsUpdate);
+      
       if (!storedPoem || needsUpdate) {
         try {
-          const response = await fetch("/api/daily-inspiration", {
+          console.log("Fetching new daily inspiration from API...");
+          const response = await fetch("/.netlify/functions/daily-inspiration", {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
@@ -27,21 +36,32 @@ const DailyInspiration = () => {
               input: "daily inspiration"
             })
           });
+          
+          console.log("API response status:", response.status);
+          
           if (!response.ok) {
-            throw new Error("Failed to fetch daily inspiration");
+            throw new Error(`Failed to fetch daily inspiration: ${response.status}`);
           }
+          
           const data = await response.json();
+          console.log("Received new poem data:", data);
+          
           setDailyPoem(data.poem);
 
           localStorage.setItem("dailyPoem", JSON.stringify(data.poem));
           localStorage.setItem("dailyPoemTimestamp", now.toISOString());
+          
+          toast.success("Today's inspiration has been updated!");
         } catch (error) {
           console.error("Error fetching daily inspiration:", error);
+          toast.error("Couldn't update today's inspiration. Using the last available one.");
+          
           if (storedPoem) {
             setDailyPoem(JSON.parse(storedPoem));
           }
         }
       } else if (storedPoem) {
+        console.log("Using stored poem from:", lastUpdate);
         setDailyPoem(JSON.parse(storedPoem));
       }
       setLoading(false);
@@ -123,7 +143,7 @@ const DailyInspiration = () => {
             <div className="absolute -top-20 -left-20 w-40 h-40 bg-gradient-to-br from-secondary/10 to-primary/10 rounded-full blur-3xl"></div>
           </div>
           
-          <p className="text-sm text-white/60 mt-6">Updated daily!</p>
+          <p className="text-sm text-white/60 mt-6">Updated daily at 4 AM ET!</p>
         </div>
       </div>
     </div>;

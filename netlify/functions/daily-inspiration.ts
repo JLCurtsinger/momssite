@@ -7,7 +7,10 @@ const openai = new OpenAI({
 });
 
 export const handler: Handler = async (event) => {
+  console.log("Daily Inspiration function triggered at:", new Date().toISOString());
+  
   if (event.httpMethod !== "POST") {
+    console.log("Method not allowed:", event.httpMethod);
     return {
       statusCode: 405,
       body: "Method Not Allowed",
@@ -16,14 +19,17 @@ export const handler: Handler = async (event) => {
 
   try {
     const { input } = JSON.parse(event.body || "{}");
+    console.log("Received input:", input);
 
     if (!input) {
+      console.log("Missing input parameter");
       return {
         statusCode: 400,
         body: JSON.stringify({ error: "Input is required" }),
       };
     }
 
+    console.log("Calling OpenAI API...");
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
@@ -39,15 +45,19 @@ export const handler: Handler = async (event) => {
       max_tokens: 120,
       temperature: 0.6,
     });
+    console.log("OpenAI API response received");
 
     const poemText = response.choices[0].message?.content || "";
     const poemLines = poemText.split("\n").filter((line) => line.trim());
+    console.log("Processed poem lines:", poemLines);
 
     // Ensure we have exactly 6 lines
     if (poemLines.length !== 6) {
+      console.log("Invalid poem format - incorrect number of lines:", poemLines.length);
       throw new Error("Invalid poem format: incorrect number of lines");
     }
 
+    console.log("Returning successful response with poem");
     return {
       statusCode: 200,
       headers: {
@@ -57,7 +67,7 @@ export const handler: Handler = async (event) => {
       body: JSON.stringify({ poem: poemLines }),
     };
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error in daily-inspiration function:", error);
     return {
       statusCode: 500,
       body: JSON.stringify({ 
